@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Blue-Red Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: rgb(5, 6, 15);
+            color: white;
+        }
+        .reset-button {
+            margin-bottom: 10px;
+            background-color: rgb(12, 12, 92);
+            color: white;
+            font-weight: bold;
+            padding: 10px;
+            font-size: 16px;
+        }
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            align-items: center;
+        }
+        .button-group {
+            margin: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        button {
+            background-color: rgb(12, 12, 92);
+            color: white;
+            font-weight: bold;
+            margin: 5px;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            height: 50px;
+            width: 100px;
+            border: none;
+        }
+        button:disabled {
+            background-color: gray;
+            cursor: not-allowed;
+        }
+        .result-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            align-items: center;
+            font-weight: bold;
+        }
+        .result {
+            font-size: 24px;
+            margin: 10px;
+            font-weight: bold;
+        }
+        .random-choice-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .random-choice-input {
+            margin: 5px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        .random-choice-output {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        @keyframes pulse {
+            0% {
+                background-color: rgba(255, 255, 255, 0.3); /* White color with opacity */
+            }
+            100% {
+                background-color: rgba(255, 255, 255, 0); /* Transparent white */
+            }
+        }
+    </style>
+</head>
+<body>
+    <button onclick="resetLabels()" class="reset-button">Reset</button>
+
+    <h1>Code Blue-Red Game</h1>
+
+    <div class="button-container">
+        <div class="button-group">
+            <button onclick="updateResult('result1', 'button1')" id="button1">1</button>
+            <div id="result1" class="result"></div>
+        </div>
+        <div class="button-group">
+            <button onclick="updateResult('result2', 'button2')" id="button2">2</button>
+            <div id="result2" class="result"></div>
+        </div>
+        <div class="button-group">
+            <button onclick="updateResult('result3', 'button3')" id="button3">3</button>
+            <div id="result3" class="result"></div>
+        </div>
+        <div class="button-group">
+            <button onclick="updateResult('result4', 'button4')" id="button4">4</button>
+            <div id="result4" class="result"></div>
+        </div>
+        <div class="button-group">
+            <button onclick="updateResult('result5', 'button5')" id="button5">5</button>
+            <div id="result5" class="result"></div>
+        </div>
+        <div class="button-group">
+            <button onclick="updateResult('result6', 'button6')" id="button6">6</button>
+            <div id="result6" class="result"></div>
+        </div>
+    </div>
+
+    <div class="random-choice-container">
+        <input type="text" id="randomChoiceInput" class="random-choice-input" placeholder="Enter choice (space separated)">
+        <button onclick="generateRandomChoice()" style="width: 120px;">Randomize</button>
+        <button onclick="clearRandomChoice()" style="width: 120px; margin-left: 5px;">Clear</button>
+        <div id="randomChoiceOutput" class="random-choice-output"></div>
+    </div>
+
+    <div class="pulse"></div>
+
+    <script>
+        function updateResult(resultId, buttonId) {
+            var resultElement = document.getElementById(resultId);
+            var buttonElement = document.getElementById(buttonId);
+
+            if (buttonElement.disabled) {
+                return;
+            }
+
+            var result = getRandomResult();
+            resultElement.textContent = result;
+
+            if (result === "RED") {
+                resultElement.style.color = "red";
+                triggerPulse("red"); // Trigger pulse effect with red color
+            } else if (result === "BLUE") {
+                resultElement.style.color = "blue";
+                triggerPulse("blue"); // Trigger pulse effect with blue color
+            } else {
+                triggerPulse("white"); // Trigger pulse effect with white color for other buttons
+            }
+
+            buttonElement.disabled = true;
+        }
+
+        function resetLabels() {
+            var resultElements = document.querySelectorAll('.result');
+            resultElements.forEach(function(element) {
+                element.textContent = '';
+                element.style.color = 'black';
+            });
+
+            var buttons = document.querySelectorAll('button');
+            buttons.forEach(function(button) {
+                button.disabled = false; // enable all buttons
+            });
+
+            // Additional code to clear the random choice output
+            var randomChoiceOutput = document.getElementById('randomChoiceOutput');
+            randomChoiceOutput.textContent = '';
+        }
+
+        function getRandomResult() {
+            var options = ["RED", "BLUE"];
+            var index = Math.floor(Math.random() * options.length);
+            return options[index];
+        }
+
+        function generateRandomChoice() {
+            var inputElement = document.getElementById('randomChoiceInput');
+            var outputElement = document.getElementById('randomChoiceOutput');
+
+            var inputText = inputElement.value.trim();
+            if (inputText === '') {
+                outputElement.textContent = 'Please Enter Choices';
+                return;
+            }
+
+            var choices = inputText.split(' ').filter(function(choice) {
+                return choice.trim() !== '';
+            });
+
+            if (choices.length === 0) {
+                outputElement.textContext = 'Please enter valid choices';
+                return;
+            }
+
+            var randomIndex = Math.floor(Math.random() * choices.length);
+            var randomChoice = choices[randomIndex];
+
+            outputElement.textContent = randomChoice;
+        }
+
+        function clearRandomChoice() {
+            var inputElement = document.getElementById('randomChoiceInput');
+            var outputElement = document.getElementById('randomChoiceOutput');
+
+            // Clear input and output
+            inputElement.value = '';
+            outputElement.textContent = '';
+        }
+
+        function triggerPulse(color) {
+            var pulse = document.querySelector('.pulse');
+            pulse.style.backgroundColor = color;
+            pulse.style.display = 'block';
+            setTimeout(() => {
+                pulse.style.display = 'none';
+            }, 1000); // Adjust the duration as needed
+        }
+    </script>
+</body>
+</html>
+
+
+<!--
+
+    +----------+
+    |          |
+    |          |
+    |          |
+    +----------+
+    |          |
+    +----------+
+
+
+-->
