@@ -87,7 +87,7 @@
 <body>
     <button onclick="resetLabels()" class="reset-button">Reset</button>
 
-    <h1>Code Blue-Red Game</h1>
+    <h1>THERE-IS-A-SPY-ON-US Game</h1>
 
     <div class="button-container">
         <div class="button-group">
@@ -137,10 +137,10 @@
             var result = getRandomResult();
             resultElement.textContent = result;
 
-            if (result === "RED") {
+            if (result === "SPY") {
                 resultElement.style.color = "red";
                 triggerPulse("red"); // Trigger pulse effect with red color
-            } else if (result === "BLUE") {
+            } else if (result === "CREW") {
                 resultElement.style.color = "blue";
                 triggerPulse("blue"); // Trigger pulse effect with blue color
             } else {
